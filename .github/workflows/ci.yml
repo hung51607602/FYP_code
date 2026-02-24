@@ -13,7 +13,8 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    container: python:${{ matrix.python-version }}
     timeout-minutes: 180
     strategy:
       matrix:
@@ -45,19 +46,8 @@ jobs:
             tf-version: 2.2.0
     steps:
     
+    # We might need to handle the case where the python image doesn't have nodejs for checkout, but checkout v3 uses node 16 which typically has native binaries fallback.
     - uses: actions/checkout@v3
-    
-    - name: Setup python environment (Python 3.8+)
-      uses: actions/setup-python@v4
-      if: matrix.python-version != '3.6' && matrix.python-version != '3.7'
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Setup legacy python environment (Python 3.6, 3.7)
-      uses: deadsnakes/action@v3.1.0
-      if: matrix.python-version == '3.6' || matrix.python-version == '3.7'
-      with:
-        python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
       run: |
