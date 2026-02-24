@@ -13,7 +13,7 @@ REQUIRED_PACKAGES = [
     'joblib',
     'fastdtw',
     'tqdm',
-    'numpy',
+    'numpy<1.24.0',
     'scikit-learn',
     'pandas',
     'matplotlib',
