@@ -13,7 +13,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 180
     strategy:
       matrix:
@@ -47,8 +47,15 @@ jobs:
     
     - uses: actions/checkout@v3
     
-    - name: Setup python environment
+    - name: Setup python environment (Python 3.8+)
       uses: actions/setup-python@v4
+      if: matrix.python-version != '3.6' && matrix.python-version != '3.7'
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Setup legacy python environment (Python 3.6, 3.7)
+      uses: deadsnakes/action@v3.1.0
+      if: matrix.python-version == '3.6' || matrix.python-version == '3.7'
       with:
         python-version: ${{ matrix.python-version }}
 
